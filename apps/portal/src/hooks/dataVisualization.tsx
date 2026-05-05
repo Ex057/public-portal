@@ -96,10 +96,10 @@ export function useDimensionViewControls({
     const onFullScreen = () => {
         if (handler.active) {
             handler.exit()
-            chartRef.current!.chart.redraw()
+            chartRef.current?.chart?.redraw()
         } else {
             handler.enter()
-            chartRef.current!.chart.redraw()
+            chartRef.current?.chart?.redraw()
         }
     }
 

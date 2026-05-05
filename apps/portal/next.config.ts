@@ -39,6 +39,20 @@ const nextConfig: NextConfig = {
     experimental: {},
     serverExternalPackages: ['canvas', '@google/earthengine'],
     transpilePackages: ['@packages/shared'],
+    webpack: (config) => {
+        config.resolve.alias = {
+            ...(config.resolve.alias ?? {}),
+            '@dhis2/app-runtime': path.resolve(
+                __dirname,
+                'node_modules/@dhis2/app-runtime'
+            ),
+            '@tanstack/react-query': path.resolve(
+                __dirname,
+                'node_modules/@tanstack/react-query'
+            ),
+        }
+        return config
+    },
 }
 
 export default nextConfig

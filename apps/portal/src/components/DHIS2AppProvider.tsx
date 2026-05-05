@@ -30,7 +30,7 @@ export function DHIS2AppProvider({
     }, [])
 
     if (!mounted) {
-        return <>{children}</>
+        return <FullPageLoader />
     }
 
     return (

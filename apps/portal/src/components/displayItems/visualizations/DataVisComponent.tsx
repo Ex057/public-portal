@@ -62,6 +62,9 @@ export function DataVisComponent({
     disableActions?: boolean
 }) {
     const { type, orgUnitConfig, periodConfig } = config
+    const fallbackLabel = 'label' in config ? config.label : undefined
+    const title =
+        visualizationConfig.name?.trim() || fallbackLabel?.trim() || 'Untitled'
     const { chartRef, tableRef } = useVisualizationRefs()
     const {
         onCloseOrgUnitSelector,
@@ -97,16 +100,12 @@ export function DataVisComponent({
         <>
             <FullScreen className="bg-white w-full h-full" handle={handler}>
                 <div
-                    key={visualizationConfig.name}
+                    key={title}
                     className="flex flex-col gap-2 w-full h-full"
                     ref={containerRef}
                 >
                     <div className="flex flex-row place-content-between">
-                        {!visualizationConfig.hideTitle && (
-                            <VisualizationTitle
-                                title={visualizationConfig.name}
-                            />
-                        )}
+                        <VisualizationTitle title={title} />
                         {!disableActions && (
                             <div className="flex flex-row gap-2 align-middle">
                                 {handler.active && (
@@ -125,7 +124,7 @@ export function DataVisComponent({
                                 )}
                                 <Tooltip label={i18n.t('More info')}>
                                     <CaptionPopover
-                                        label={visualizationConfig.name}
+                                        label={title}
                                         visualization={config}
                                     />
                                 </Tooltip>
@@ -186,7 +185,7 @@ export function DataVisComponent({
                         setSelectedOrgUnits(val ?? [])
                     }}
                     open={showOrgUnitSelector}
-                    title={visualizationConfig.name}
+                    title={title}
                     handleClose={onCloseOrgUnitSelector}
                     limitSelectionToLevels={orgUnitConfig?.orgUnitLevels}
                     orgUnitsId={orgUnitConfig?.orgUnits}
@@ -200,7 +199,7 @@ export function DataVisComponent({
                     onReset={() => {
                         setSelectedPeriods([])
                     }}
-                    title={visualizationConfig.name}
+                    title={title}
                     periodState={
                         !isEmpty(selectedPeriods)
                             ? selectedPeriods

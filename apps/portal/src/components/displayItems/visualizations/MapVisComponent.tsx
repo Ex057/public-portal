@@ -48,6 +48,8 @@ export function MapVisComponent({
 }) {
     const searchParams = useSearchParams()
     const { orgUnitConfig, periodConfig } = config
+    const fallbackLabel = 'label' in config ? config.label : undefined
+    const title = mapConfig.name?.trim() || fallbackLabel?.trim() || 'Untitled'
     const { value: showTable, toggle: toggleShowTable } = useBoolean(false)
     const handler = useFullScreenHandle()
     const mapContainer = useRef<HTMLDivElement | null>(null)
@@ -84,24 +86,23 @@ export function MapVisComponent({
                 exportOnly: true,
                 spinnerBgColor: '#FFFFFF',
                 customSpinnerClass: 'color-primary',
-                customWindowTitle: `${mapConfig.name}`,
+                customWindowTitle: title,
                 hideClasses: ['leaflet-control', 'leaflet-bar'],
             }).addTo(map)
         }
         return null
-    }, [map, mapConfig.name])
+    }, [map, title])
 
     const tableRef = useRef<HTMLTableElement>(null)
 
     const onDownload = () => {
-        const label = `${mapConfig.name.toLowerCase()}`
+        const label = title.toLowerCase()
         if (showTable) {
             downloadExcelFromTable(tableRef.current!, label)
             return
         }
         if (printPlugin) {
-            const label = `${mapConfig.name.toLowerCase()}`
-            printPlugin?.printMap('A4Landscape page', label.toLowerCase())
+            printPlugin?.printMap('A4Landscape page', label)
         }
     }
 
@@ -213,7 +214,7 @@ export function MapVisComponent({
             >
                 <div className="flex flex-col gap-2 p-4  w-full h-full ">
                     <div className="flex flex-row place-content-between">
-                        <VisualizationTitle title={mapConfig.name} />
+                        <VisualizationTitle title={title} />
                         {!disableActions && (
                             <div className="flex flex-row gap-2">
                                 {handler.active && (
@@ -229,7 +230,7 @@ export function MapVisComponent({
                                 )}
                                 <Tooltip label={i18n.t('More info')}>
                                     <CaptionPopover
-                                        label={mapConfig.name}
+                                        label={title}
                                         visualization={config}
                                     />
                                 </Tooltip>
@@ -321,7 +322,7 @@ export function MapVisComponent({
                         })
                     }}
                     open={orgUnits}
-                    title={mapConfig.name}
+                    title={title}
                     handleClose={hideOrgUnits}
                     limitSelectionToLevels={orgUnitConfig?.orgUnitLevels}
                     orgUnitsId={orgUnitConfig?.orgUnits}
@@ -339,7 +340,7 @@ export function MapVisComponent({
                         setPeriodState(val)
                     }}
                     open={period}
-                    title={mapConfig.name}
+                    title={title}
                     handleClose={hidePeriods}
                     categories={periodConfig?.categories}
                     periodTypes={periodConfig?.periodTypes}

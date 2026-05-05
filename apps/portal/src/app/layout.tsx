@@ -12,6 +12,8 @@ import { env } from '@/utils/env'
 import { dhis2HttpClient } from '@/utils/api/dhis2'
 import { DHIS2ConnectionError } from '@/components/DHIS2ConnectionError'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata() {
     return await getAppMetadata()
 }
@@ -36,8 +38,8 @@ export default async function RootLayout({
             </head>
             <body suppressHydrationWarning>
                 <Providers config={config?.appearanceConfig}>
-                    <NavigationBar config={config} />
                     <DHIS2AppProvider contextPath={contextPath}>
+                        <NavigationBar config={config} />
                         {children}
                     </DHIS2AppProvider>
                 </Providers>
