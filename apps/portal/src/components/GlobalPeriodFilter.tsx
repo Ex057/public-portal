@@ -26,23 +26,35 @@ export function GlobalPeriodFilter({
     const router = useRouter()
     const searchParams = useSearchParams()
     const { value: hide, setTrue: onClose, setFalse: onOpen } = useBoolean(true)
+
+    const resolvePeriodLabel = (id: string) => {
+        if (!id) return ''
+        if (/^\d{4}$/.test(id) && parseInt(id) < 1009) {
+            return id
+        }
+
+        try {
+            const period = PeriodUtility.getPeriodById(id)
+            return period.type.type == PeriodTypeCategory.FIXED
+                ? createFixedPeriodFromPeriodId({
+                      periodId: id,
+                      calendar: 'gregory',
+                  })?.displayName ?? period.name
+                : period.name
+        } catch {
+            return id
+        }
+    }
+
     const periods = useMemo(() => {
         return searchParams
             .get('pe')
             ?.split(',')
-            ?.map((id: string) => {
-                const label =
-                    /^\d{4}$/.test(id) && parseInt(id) < 1009
-                        ? id
-                        : PeriodUtility.getPeriodById(id).type.type ==
-                            PeriodTypeCategory.FIXED
-                          ? createFixedPeriodFromPeriodId({
-                                periodId: id,
-                                calendar: 'gregory',
-                            })?.displayName
-                          : PeriodUtility.getPeriodById(id).name
-                return { value: id, label: label }
-            })
+            ?.filter((id: string) => !!id?.trim())
+            ?.map((id: string) => ({
+                value: id,
+                label: resolvePeriodLabel(id),
+            }))
     }, [searchParams])
 
     const onUpdate = (value: string[]) => {

@@ -8,6 +8,11 @@ overrides:
   '@types/react': 19.2.14
   '@types/react-dom': 19.2.3
 
+patchedDependencies:
+  '@hisptz/dhis2-analytics@2.1.37':
+    hash: 20790f051f57a65f5b45263c3927c4d14657e4f66b3d8a7929a2940468bc2b16
+    path: patches/@hisptz__dhis2-analytics.patch
+
 importers:
 
   .:
@@ -144,7 +149,7 @@ importers:
         version: 18.0.1(@types/react@19.2.14)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@hisptz/dhis2-analytics':
         specifier: ^2.1.35
-        version: 2.1.37(e744261a15b1635ba617fcab4e3ecac3)
+        version: 2.1.37(patch_hash=20790f051f57a65f5b45263c3927c4d14657e4f66b3d8a7929a2940468bc2b16)(e744261a15b1635ba617fcab4e3ecac3)
       '@hisptz/dhis2-ui':
         specifier: ^2.0.52
         version: 2.0.52(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@18.3.1(react@18.3.1))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(classnames@2.5.1)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@18.3.1))(react@18.3.1)(usehooks-ts@3.1.1(react@18.3.1))
@@ -337,7 +342,7 @@ importers:
         version: 10.13.1(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(styled-jsx@4.0.1(@babel/core@7.29.0)(react@19.2.5))
       '@hisptz/dhis2-analytics':
         specifier: ^2.1.35
-        version: 2.1.37(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(@tanstack/react-query@4.44.0(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@types/node@20.19.39)(@types/react@19.2.14)(classnames@2.5.1)(highcharts-react-official@3.2.3(highcharts@12.6.0)(react@19.2.5))(highcharts@12.6.0)(konva@10.3.0)(lodash@4.18.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(redux@5.0.1)(three@0.184.0)(usehooks-ts@3.1.1(react@19.2.5))(zdog@1.1.3)(zod@4.4.3)
+        version: 2.1.37(patch_hash=20790f051f57a65f5b45263c3927c4d14657e4f66b3d8a7929a2940468bc2b16)(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(@tanstack/react-query@4.44.0(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@types/node@20.19.39)(@types/react@19.2.14)(classnames@2.5.1)(highcharts-react-official@3.2.3(highcharts@12.6.0)(react@19.2.5))(highcharts@12.6.0)(konva@10.3.0)(lodash@4.18.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(redux@5.0.1)(three@0.184.0)(usehooks-ts@3.1.1(react@19.2.5))(zdog@1.1.3)(zod@4.4.3)
       '@hisptz/dhis2-ui':
         specifier: ^2.0.52
         version: 2.0.52(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(classnames@2.5.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
@@ -377,6 +382,9 @@ importers:
       '@tabler/icons-react':
         specifier: ^3.31.0
         version: 3.41.1(react@19.2.5)
+      '@tanstack/react-query':
+        specifier: ^4.44.0
+        version: 4.44.0(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
       canvas:
         specifier: ^3.1.0
         version: 3.2.3
@@ -533,7 +541,7 @@ importers:
         version: 3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
       '@hisptz/dhis2-analytics':
         specifier: '>=2'
-        version: 2.1.37(30ed56864b4814e82a800d2d860b6d19)
+        version: 2.1.37(patch_hash=20790f051f57a65f5b45263c3927c4d14657e4f66b3d8a7929a2940468bc2b16)(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(@tanstack/react-query@5.100.9(react@19.2.5))(@types/node@25.6.0)(@types/react@19.2.14)(classnames@2.5.1)(highcharts-react-official@3.2.3(highcharts@12.6.0)(react@19.2.5))(highcharts@12.6.0)(konva@10.3.0)(lodash@4.18.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-konva@18.2.14(@types/react@19.2.14)(konva@10.3.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(redux@5.0.1)(three@0.184.0)(usehooks-ts@3.1.1(react@19.2.5))(zdog@1.1.3)(zod@4.4.3)
       '@hisptz/dhis2-utils':
         specifier: '>=2'
         version: 2.0.19(@dhis2/d2-i18n@1.2.0)(lodash@4.18.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
@@ -4613,6 +4621,9 @@ packages:
   '@tanstack/query-core@4.44.0':
     resolution: {integrity: sha512-swSgb7OiPRR3UuIL7NuDrZNSMGmQD+wdtHxPD7j60SvBEnxbXurl5XOirtGEX2gm2hbK6mC8kMV1I+uO3l0UOw==}
 
+  '@tanstack/query-core@5.100.9':
+    resolution: {integrity: sha512-SJSFw1S8+kQ0+knv/XGfrbocWoAlT7vDKsSImtLx3ZPQmEcR46hkDjLSvynSy25N8Ms4tIEini1FuBd5k7IscQ==}
+
   '@tanstack/react-query@4.44.0':
     resolution: {integrity: sha512-RuIqHYrS98LrK/8kJJOJMMSQ/BCpojwsXDh7p0fBmp38ZOz6dlk+uyFRRusH+V+t3POoCsDOQ2zhomEYOeReXw==}
     peerDependencies:
@@ -4624,6 +4635,11 @@ packages:
         optional: true
       react-native:
         optional: true
+
+  '@tanstack/react-query@5.100.9':
+    resolution: {integrity: sha512-Oa44XkaI3kCNN6ME0KByU3xT3SEUNOMfZpHxL6+wFoTm+OeUFYHKdeYVe0aOXlRDm/f15sgLwEt2HDorIdW8+A==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@tanstack/react-router-devtools@1.166.13':
     resolution: {integrity: sha512-6yKRFFJrEEOiGp5RAAuGCYsl81M4XAhJmLcu9PKj+HZle4A3dsP60lwHoqQYWHMK9nKKFkdXR+D8qxzxqtQbEA==}
@@ -18616,62 +18632,8 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@hisptz/dhis2-analytics@2.1.37(30ed56864b4814e82a800d2d860b6d19)':
-    dependencies:
-      '@hisptz/dhis2-ui': 2.0.52(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(classnames@2.5.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
-      '@hisptz/dhis2-utils': 2.0.19(@dhis2/d2-i18n@1.2.0)(lodash@4.18.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
-      '@react-leaflet/core': 2.1.0(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@react-pdf/renderer': 4.5.1(react@19.2.5)
-      '@tanstack/react-query': 4.44.0(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)
-      '@tanstack/react-table': 8.21.3(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      async-es: 3.2.6
-      classnames: 2.5.1
-      d3-color: 3.1.0
-      d3-scale: 4.0.2
-      file-saver: 2.0.5
-      geolib: 3.3.14
-      highcharts: 12.6.0
-      highcharts-react-official: 3.2.3(highcharts@12.6.0)(react@19.2.5)
-      jotai-devtools: 0.10.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(redux@5.0.1)
-      leaflet: 1.9.4
-      leaflet-easyprint: 2.1.9
-      leaflet.fullscreen: 4.0.0
-      lodash: 4.18.1
-      luxon: 3.7.2
-      react-circular-progressbar: 2.2.0(react@19.2.5)
-      react-dnd: 16.0.1(@types/node@25.6.0)(@types/react@19.2.14)(react@19.2.5)
-      react-dnd-html5-backend: 16.0.1
-      react-error-boundary: 4.1.2(react@19.2.5)
-      react-helmet: 6.1.0(react@19.2.5)
-      react-leaflet: 4.2.1(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      react-leaflet-custom-control: 1.5.0(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      react-spring: 9.7.5(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(konva@10.3.0)(react-dom@19.2.5(react@19.2.5))(react-konva@18.2.14(@types/react@19.2.14)(konva@10.3.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(three@0.184.0)(zdog@1.1.3)
-      react-to-print: 3.3.0(react@19.2.5)
-      screenfull: 6.0.2
-      xlsx: 0.18.5
-      zod: 4.4.3
-    transitivePeerDependencies:
-      - '@dhis2/app-runtime'
-      - '@dhis2/d2-i18n'
-      - '@react-three/fiber'
-      - '@types/hoist-non-react-statics'
-      - '@types/node'
-      - '@types/react'
-      - css-to-react-native
-      - konva
-      - prop-types
-      - react
-      - react-dom
-      - react-konva
-      - react-native
-      - react-zdog
-      - redux
-      - three
-      - usehooks-ts
-      - zdog
-
-  '@hisptz/dhis2-analytics@2.1.37(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(@tanstack/react-query@4.44.0(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@types/node@20.19.39)(@types/react@19.2.14)(classnames@2.5.1)(highcharts-react-official@3.2.3(highcharts@12.6.0)(react@19.2.5))(highcharts@12.6.0)(konva@10.3.0)(lodash@4.18.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(redux@5.0.1)(three@0.184.0)(usehooks-ts@3.1.1(react@19.2.5))(zdog@1.1.3)(zod@4.4.3)':
-    dependencies:
+  ? '@hisptz/dhis2-analytics@2.1.37(patch_hash=20790f051f57a65f5b45263c3927c4d14657e4f66b3d8a7929a2940468bc2b16)(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(@tanstack/react-query@4.44.0(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@types/node@20.19.39)(@types/react@19.2.14)(classnames@2.5.1)(highcharts-react-official@3.2.3(highcharts@12.6.0)(react@19.2.5))(highcharts@12.6.0)(konva@10.3.0)(lodash@4.18.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(redux@5.0.1)(three@0.184.0)(usehooks-ts@3.1.1(react@19.2.5))(zdog@1.1.3)(zod@4.4.3)'
+  : dependencies:
       '@hisptz/dhis2-ui': 2.0.52(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(classnames@2.5.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
       '@hisptz/dhis2-utils': 2.0.19(@dhis2/d2-i18n@1.2.0)(lodash@4.18.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
       '@react-leaflet/core': 2.1.0(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -18724,7 +18686,61 @@ snapshots:
       - usehooks-ts
       - zdog
 
-  '@hisptz/dhis2-analytics@2.1.37(e744261a15b1635ba617fcab4e3ecac3)':
+  ? '@hisptz/dhis2-analytics@2.1.37(patch_hash=20790f051f57a65f5b45263c3927c4d14657e4f66b3d8a7929a2940468bc2b16)(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(@tanstack/react-query@5.100.9(react@19.2.5))(@types/node@25.6.0)(@types/react@19.2.14)(classnames@2.5.1)(highcharts-react-official@3.2.3(highcharts@12.6.0)(react@19.2.5))(highcharts@12.6.0)(konva@10.3.0)(lodash@4.18.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-konva@18.2.14(@types/react@19.2.14)(konva@10.3.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(redux@5.0.1)(three@0.184.0)(usehooks-ts@3.1.1(react@19.2.5))(zdog@1.1.3)(zod@4.4.3)'
+  : dependencies:
+      '@hisptz/dhis2-ui': 2.0.52(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5))(@dhis2/d2-i18n@1.2.0)(classnames@2.5.1)(prop-types@15.8.1)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
+      '@hisptz/dhis2-utils': 2.0.19(@dhis2/d2-i18n@1.2.0)(lodash@4.18.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(usehooks-ts@3.1.1(react@19.2.5))
+      '@react-leaflet/core': 2.1.0(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@react-pdf/renderer': 4.5.1(react@19.2.5)
+      '@tanstack/react-query': 5.100.9(react@19.2.5)
+      '@tanstack/react-table': 8.21.3(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      async-es: 3.2.6
+      classnames: 2.5.1
+      d3-color: 3.1.0
+      d3-scale: 4.0.2
+      file-saver: 2.0.5
+      geolib: 3.3.14
+      highcharts: 12.6.0
+      highcharts-react-official: 3.2.3(highcharts@12.6.0)(react@19.2.5)
+      jotai-devtools: 0.10.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(redux@5.0.1)
+      leaflet: 1.9.4
+      leaflet-easyprint: 2.1.9
+      leaflet.fullscreen: 4.0.0
+      lodash: 4.18.1
+      luxon: 3.7.2
+      react-circular-progressbar: 2.2.0(react@19.2.5)
+      react-dnd: 16.0.1(@types/node@25.6.0)(@types/react@19.2.14)(react@19.2.5)
+      react-dnd-html5-backend: 16.0.1
+      react-error-boundary: 4.1.2(react@19.2.5)
+      react-helmet: 6.1.0(react@19.2.5)
+      react-leaflet: 4.2.1(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      react-leaflet-custom-control: 1.5.0(leaflet@1.9.4)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      react-spring: 9.7.5(@react-three/fiber@9.6.1(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react@19.2.5)(three@0.184.0))(konva@10.3.0)(react-dom@19.2.5(react@19.2.5))(react-konva@18.2.14(@types/react@19.2.14)(konva@10.3.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5))(react-zdog@1.2.2)(react@19.2.5)(three@0.184.0)(zdog@1.1.3)
+      react-to-print: 3.3.0(react@19.2.5)
+      screenfull: 6.0.2
+      xlsx: 0.18.5
+      zod: 4.4.3
+    transitivePeerDependencies:
+      - '@dhis2/app-runtime'
+      - '@dhis2/d2-i18n'
+      - '@react-three/fiber'
+      - '@types/hoist-non-react-statics'
+      - '@types/node'
+      - '@types/react'
+      - css-to-react-native
+      - konva
+      - prop-types
+      - react
+      - react-dom
+      - react-konva
+      - react-native
+      - react-zdog
+      - redux
+      - three
+      - usehooks-ts
+      - zdog
+
+  '@hisptz/dhis2-analytics@2.1.37(patch_hash=20790f051f57a65f5b45263c3927c4d14657e4f66b3d8a7929a2940468bc2b16)(e744261a15b1635ba617fcab4e3ecac3)':
     dependencies:
       '@hisptz/dhis2-ui': 2.0.52(@dhis2/app-runtime@3.17.0(@dhis2/data-engine@3.17.0)(react-dom@18.3.1(react@18.3.1))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@18.3.1))(react@18.3.1))(@dhis2/d2-i18n@1.2.0)(classnames@2.5.1)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@18.3.1))(react@18.3.1)(usehooks-ts@3.1.1(react@18.3.1))
       '@hisptz/dhis2-utils': 2.0.19(@dhis2/d2-i18n@1.2.0)(lodash@4.18.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(usehooks-ts@3.1.1(react@18.3.1))
@@ -20921,6 +20937,8 @@ snapshots:
 
   '@tanstack/query-core@4.44.0': {}
 
+  '@tanstack/query-core@5.100.9': {}
+
   '@tanstack/react-query@4.44.0(react-dom@18.3.1(react@18.3.1))(react-native@0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 4.44.0
@@ -20938,6 +20956,11 @@ snapshots:
     optionalDependencies:
       react-dom: 19.2.5(react@19.2.5)
       react-native: 0.85.2(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.5)
+
+  '@tanstack/react-query@5.100.9(react@19.2.5)':
+    dependencies:
+      '@tanstack/query-core': 5.100.9
+      react: 19.2.5
 
   '@tanstack/react-router-devtools@1.166.13(@tanstack/react-router@1.169.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@tanstack/router-core@1.169.1)(csstype@3.2.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:

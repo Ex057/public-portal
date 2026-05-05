@@ -79,6 +79,16 @@
         "overrides": {
             "@types/react": "19.2.14",
             "@types/react-dom": "19.2.3"
-        }
+        },
+        "patchedDependencies": {
+            "@hisptz/dhis2-analytics@2.1.37": "patches/@hisptz__dhis2-analytics.patch"
+        },
+        "onlyBuiltDependencies": [
+            "@dhis2/cli-helpers-engine",
+            "@tailwindcss/oxide",
+            "core-js-pure",
+            "cypress",
+            "esbuild"
+        ]
     }
 }

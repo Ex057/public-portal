@@ -14,6 +14,37 @@ import {
     VisualizationConfig,
     YearOverYearVisualizationConfig,
 } from '@packages/shared/schemas'
+import { compact, isEmpty } from 'lodash-es'
+
+type AnalyticsParams = Record<string, string[]>
+
+function normalizeAnalyticsParams(params: AnalyticsParams): AnalyticsParams {
+    return Object.fromEntries(
+        Object.entries(params)
+            .map(([key, values]) => [key, compact(values)])
+            .filter(([, values]) => values.length > 0)
+    )
+}
+
+function ensurePeriod(
+    filters: AnalyticsParams,
+    dimensions: AnalyticsParams,
+    fallbackPeriods: string[] = ['THIS_YEAR']
+): { filters: AnalyticsParams; dimensions: AnalyticsParams } {
+    const normalizedFilters = normalizeAnalyticsParams(filters)
+    const normalizedDimensions = normalizeAnalyticsParams(dimensions)
+    const hasPeriod =
+        !isEmpty(normalizedFilters.pe) || !isEmpty(normalizedDimensions.pe)
+
+    if (hasPeriod) {
+        return { filters: normalizedFilters, dimensions: normalizedDimensions }
+    }
+
+    return {
+        filters: { ...normalizedFilters, pe: fallbackPeriods },
+        dimensions: normalizedDimensions,
+    }
+}
 
 const analyticsQuery = {
     analytics: {
@@ -58,24 +89,49 @@ export function useAnalytics({
     }>(analyticsQuery, {
         lazy: true,
     })
+    const [lastError, setLastError] = useState<string>()
 
     useEffect(() => {
-        refetch({
-            filters: getVisualizationFilters(visualizationConfig, {
-                searchParams: params,
-                selectedOrgUnits,
-                selectedPeriods,
-            }),
-            dimensions: getVisualizationDimensions(visualizationConfig, {
-                searchParams: params,
-                selectedOrgUnits,
-                selectedPeriods,
-            }),
+        const baseFilters = getVisualizationFilters(visualizationConfig, {
+            searchParams: params,
+            selectedOrgUnits,
+            selectedPeriods,
         })
+        const baseDimensions = getVisualizationDimensions(visualizationConfig, {
+            searchParams: params,
+            selectedOrgUnits,
+            selectedPeriods,
+        })
+        const { filters, dimensions } = ensurePeriod(
+            baseFilters,
+            baseDimensions,
+            !isEmpty(selectedPeriods)
+                ? selectedPeriods
+                : params.get('pe')?.split(',') ?? ['THIS_YEAR']
+        )
+
+        refetch({
+            filters,
+            dimensions,
+        })
+            .then(() => setLastError(undefined))
+            .catch((e: unknown) => {
+                console.error('Analytics fetch failed', {
+                    visualizationName: visualizationConfig.name,
+                    visualizationType: visualizationConfig.type,
+                    filters,
+                    dimensions,
+                    error: e,
+                })
+                setLastError(
+                    e instanceof Error ? e.message : 'Unknown fetch error'
+                )
+            })
     }, [refetch, params, selectedOrgUnits, selectedPeriods])
     return {
         loading,
         analytics: data?.analytics,
+        lastError,
         refetch,
         setSelectedPeriods,
         setSelectedOrgUnits,
@@ -123,6 +179,7 @@ export function useYearOverYearAnalytics({
         analytics: AnalyticsData
         //@ts-expect-error DHIS2 app runtime issues
     }>(analyticsQuery, { lazy: true })
+    const [lastError, setLastError] = useState<string>()
 
     //Get the selected relative period
     const selectedRelativePeriods = Object.entries(
@@ -170,34 +227,53 @@ export function useYearOverYearAnalytics({
                 const periodDate = new Date(date.setFullYear(year))
                 const periodDateString = `${periodDate.getFullYear()}-${periodDate.getMonth() + 1}-${periodDate.getDate() + 1}`
 
-                const response = (await refetch({
-                    filters: {
+                const { filters, dimensions } = ensurePeriod(
+                    {
                         ou:
                             selectedOrgUnits.length > 0
                                 ? selectedOrgUnits
                                 : orgUnits,
                         dx,
                     },
-                    relativePeriodDate: periodDateString,
-                    dimensions: {
+                    {
                         pe:
                             selectedPeriods.length > 0
                                 ? selectedPeriods
                                 : selectedRelativePeriods,
                     },
+                    ['THIS_YEAR']
+                )
+
+                const response = (await refetch({
+                    filters,
+                    relativePeriodDate: periodDateString,
+                    dimensions,
                 })) as { analytics: AnalyticsData }
+                setLastError(undefined)
 
                 yearData.set(yearId, response.analytics)
             }
             setData(yearData)
         }
 
-        fetchYearlyAnalytics()
+        fetchYearlyAnalytics().catch((e: unknown) => {
+            console.error('Year-over-year analytics fetch failed', {
+                visualizationName: visualizationConfig.name,
+                visualizationType: visualizationConfig.type,
+                selectedPeriods,
+                selectedOrgUnits,
+                error: e,
+            })
+            setLastError(
+                e instanceof Error ? e.message : 'Unknown fetch error'
+            )
+        })
     }, [selectedOrgUnits, selectedPeriods, visualizationConfig, years])
 
     return {
         analytics: data,
         loading,
+        lastError,
         setSelectedPeriods,
         setSelectedOrgUnits,
         selectedPeriods,

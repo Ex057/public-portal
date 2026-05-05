@@ -19,6 +19,48 @@ export function TableVisualizer({
     setRef,
     fullScreen,
 }: TableVisualizerProps) {
+    const sanitizedAnalytics = useMemo(() => {
+        const headers = analytics?.headers ?? []
+        const expectedColumns = headers.length
+        const rows = analytics?.rows ?? []
+        const headerNames = headers.map((header) => header.name)
+
+        const layoutDimensions = [
+            ...(visualization.rows ?? []),
+            ...(visualization.columns ?? []),
+            ...(visualization.filters ?? []),
+        ]
+
+        const keyIndexes = layoutDimensions
+            .map((dimension) => headerNames.indexOf(dimension.dimension))
+            .filter((index) => index >= 0)
+
+        const fallbackKeyIndexes =
+            keyIndexes.length > 0
+                ? keyIndexes
+                : headerNames
+                      .map((name, index) => ({ name, index }))
+                      .filter(({ name }) => name !== 'value')
+                      .map(({ index }) => index)
+
+        const validRows = rows.filter(
+            (row) => Array.isArray(row) && row.length === expectedColumns
+        )
+
+        const rowIdentity = (row: string[]) =>
+            fallbackKeyIndexes.map((index) => row[index]).join('|')
+
+        const uniqueRows = Array.from(
+            new Map(validRows.map((row) => [rowIdentity(row), row])).values()
+        )
+
+        if (uniqueRows.length === rows.length) return analytics
+        return {
+            ...analytics,
+            rows: uniqueRows,
+        }
+    }, [analytics])
+
     const legend = useMemo(() => {
         if (!visualization.legend) {
             return
@@ -59,7 +101,7 @@ export function TableVisualizer({
                     ? `calc(100dvh - 96px)`
                     : `calc(100% - 48px)`,
             }}
-            analytics={analytics}
+            analytics={sanitizedAnalytics}
             config={{
                 options: {
                     fixColumnHeaders: true,
