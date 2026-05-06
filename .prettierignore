@@ -14,13 +14,8 @@ thumb
 sketch
 
 # DHIS2_INSTANCE Platform
-apps/manager/.d2
-apps/manager/src/routeTree.gen.ts
-
-
+.d2
 src/locales
 build
 *.env
 cypress.env.json
-
-pnpm-lock.yaml

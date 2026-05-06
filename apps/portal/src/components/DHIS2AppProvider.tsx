@@ -1,57 +1,50 @@
-'use client'
+"use client";
 
-import { ReactNode, useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
-import { FullPageLoader } from '@/components/FullPageLoader'
+import { ComponentType, ReactNode } from "react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { FullPageLoader } from "@/components/FullPageLoader";
 
-const NoSsrAppProvider = dynamic(
-    async () => {
-        return import('@dhis2/app-runtime').then(({ Provider }) => ({
-            default: Provider,
-        }))
-    },
-    {
-        ssr: false,
-        loading: FullPageLoader,
-    }
-)
+const NoSsrAppProvider: ComponentType<any> = dynamic(
+	async () => {
+		return import("@dhis2/app-runtime").then(({ Provider }) => ({
+			default: Provider,
+		}));
+	},
+	{
+		ssr: false,
+		loading: FullPageLoader,
+	},
+);
 
 export function DHIS2AppProvider({
-    children,
-    contextPath,
+	children,
+	contextPath,
 }: {
-    children: ReactNode
-    contextPath: string
+	children: ReactNode;
+	contextPath: string;
 }) {
-    const [mounted, setMounted] = useState(false)
+	const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+	useEffect(() => {
+		setMounted(true);
+	}, []);
 
-    if (!mounted) {
-        return <FullPageLoader />
-    }
+	if (!mounted) {
+		return children;
+	}
 
-    return (
-        <NoSsrAppProvider
-            userInfo={{
-                id: 'portal-user',
-                authorities: [],
-                organisationUnits: [],
-                username: 'portal-user',
-                displayName: 'Portal User',
-            }}
-            config={{
-                baseUrl: `${window.location.protocol}//${window.location.host}${contextPath ?? ''}`,
-                // @ts-expect-error not required in this instance
-                apiVersion: '',
-            }}
-            plugin={false}
-            parentAlertsAdd={{}}
-            showAlertsInPlugin={false}
-        >
-            {children}
-        </NoSsrAppProvider>
-    )
+	return (
+		<NoSsrAppProvider
+			config={{
+				baseUrl: `${window.location.protocol}//${window.location.host}${contextPath ?? ""}`,
+				apiVersion: "",
+			}}
+			plugin={false}
+			parentAlertsAdd={{}}
+			showAlertsInPlugin={false}
+		>
+			{children}
+		</NoSsrAppProvider>
+	);
 }

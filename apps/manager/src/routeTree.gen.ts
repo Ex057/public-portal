@@ -106,9 +106,9 @@ const ModulesProviderModuleIdFormProviderEditIndexLazyRoute =
     path: '/edit/',
     getParentRoute: () => ModulesProviderModuleIdFormProviderRoute,
   } as any).lazy(() =>
-    import('./modules/modules/_provider/$moduleId/_formProvider/edit/index.lazy').then(
-      (d) => d.Route,
-    ),
+    import(
+      './modules/modules/_provider/$moduleId/_formProvider/edit/index.lazy'
+    ).then((d) => d.Route),
   )
 const ModulesProviderModuleIdFormProviderEditLayoutRoute =
   ModulesProviderModuleIdFormProviderEditLayoutRouteImport.update({
@@ -157,19 +157,19 @@ export interface FileRoutesByFullPath {
   '/general': typeof GeneralProviderRouteWithChildren
   '/menu': typeof MenuProviderRouteWithChildren
   '/modules': typeof ModulesProviderRouteWithChildren
-  '/configuration/': typeof ConfigurationIndexRoute
+  '/configuration': typeof ConfigurationIndexRoute
   '/modules/': typeof ModulesProviderIndexRoute
   '/appearance/': typeof AppearanceProviderIndexLazyRoute
   '/general/': typeof GeneralProviderIndexLazyRoute
   '/menu/': typeof MenuProviderIndexLazyRoute
   '/modules/$moduleId': typeof ModulesProviderModuleIdFormProviderRouteWithChildren
   '/modules/$moduleId/edit/layout': typeof ModulesProviderModuleIdFormProviderEditLayoutRoute
-  '/modules/$moduleId/edit/': typeof ModulesProviderModuleIdFormProviderEditIndexLazyRoute
+  '/modules/$moduleId/edit': typeof ModulesProviderModuleIdFormProviderEditIndexLazyRoute
   '/modules/$moduleId/edit/$groupIndex/layout': typeof ModulesProviderModuleIdFormProviderEditGroupIndexLayoutRoute
-  '/modules/$moduleId/edit/$groupIndex/': typeof ModulesProviderModuleIdFormProviderEditGroupIndexIndexRoute
+  '/modules/$moduleId/edit/$groupIndex': typeof ModulesProviderModuleIdFormProviderEditGroupIndexIndexRoute
   '/modules/$moduleId/edit/section/$sectionIndex/layout': typeof ModulesProviderModuleIdFormProviderEditSectionSectionIndexLayoutRoute
-  '/modules/$moduleId/edit/section/$sectionIndex/': typeof ModulesProviderModuleIdFormProviderEditSectionSectionIndexIndexRoute
-  '/modules/$moduleId/edit/static/$itemId/': typeof ModulesProviderModuleIdFormProviderEditStaticItemIdIndexRoute
+  '/modules/$moduleId/edit/section/$sectionIndex': typeof ModulesProviderModuleIdFormProviderEditSectionSectionIndexIndexRoute
+  '/modules/$moduleId/edit/static/$itemId': typeof ModulesProviderModuleIdFormProviderEditStaticItemIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
@@ -216,19 +216,19 @@ export interface FileRouteTypes {
     | '/general'
     | '/menu'
     | '/modules'
-    | '/configuration/'
+    | '/configuration'
     | '/modules/'
     | '/appearance/'
     | '/general/'
     | '/menu/'
     | '/modules/$moduleId'
     | '/modules/$moduleId/edit/layout'
-    | '/modules/$moduleId/edit/'
+    | '/modules/$moduleId/edit'
     | '/modules/$moduleId/edit/$groupIndex/layout'
-    | '/modules/$moduleId/edit/$groupIndex/'
+    | '/modules/$moduleId/edit/$groupIndex'
     | '/modules/$moduleId/edit/section/$sectionIndex/layout'
-    | '/modules/$moduleId/edit/section/$sectionIndex/'
-    | '/modules/$moduleId/edit/static/$itemId/'
+    | '/modules/$moduleId/edit/section/$sectionIndex'
+    | '/modules/$moduleId/edit/static/$itemId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -288,7 +288,7 @@ declare module '@tanstack/react-router' {
     '/configuration/': {
       id: '/configuration/'
       path: '/configuration'
-      fullPath: '/configuration/'
+      fullPath: '/configuration'
       preLoaderRoute: typeof ConfigurationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -358,7 +358,7 @@ declare module '@tanstack/react-router' {
     '/modules/_provider/$moduleId/_formProvider/edit/': {
       id: '/modules/_provider/$moduleId/_formProvider/edit/'
       path: '/edit'
-      fullPath: '/modules/$moduleId/edit/'
+      fullPath: '/modules/$moduleId/edit'
       preLoaderRoute: typeof ModulesProviderModuleIdFormProviderEditIndexLazyRouteImport
       parentRoute: typeof ModulesProviderModuleIdFormProviderRoute
     }
@@ -372,7 +372,7 @@ declare module '@tanstack/react-router' {
     '/modules/_provider/$moduleId/_formProvider/edit/$groupIndex/': {
       id: '/modules/_provider/$moduleId/_formProvider/edit/$groupIndex/'
       path: '/edit/$groupIndex'
-      fullPath: '/modules/$moduleId/edit/$groupIndex/'
+      fullPath: '/modules/$moduleId/edit/$groupIndex'
       preLoaderRoute: typeof ModulesProviderModuleIdFormProviderEditGroupIndexIndexRouteImport
       parentRoute: typeof ModulesProviderModuleIdFormProviderRoute
     }
@@ -386,14 +386,14 @@ declare module '@tanstack/react-router' {
     '/modules/_provider/$moduleId/_formProvider/edit/static/$itemId/': {
       id: '/modules/_provider/$moduleId/_formProvider/edit/static/$itemId/'
       path: '/edit/static/$itemId'
-      fullPath: '/modules/$moduleId/edit/static/$itemId/'
+      fullPath: '/modules/$moduleId/edit/static/$itemId'
       preLoaderRoute: typeof ModulesProviderModuleIdFormProviderEditStaticItemIdIndexRouteImport
       parentRoute: typeof ModulesProviderModuleIdFormProviderRoute
     }
     '/modules/_provider/$moduleId/_formProvider/edit/section/$sectionIndex/': {
       id: '/modules/_provider/$moduleId/_formProvider/edit/section/$sectionIndex/'
       path: '/edit/section/$sectionIndex'
-      fullPath: '/modules/$moduleId/edit/section/$sectionIndex/'
+      fullPath: '/modules/$moduleId/edit/section/$sectionIndex'
       preLoaderRoute: typeof ModulesProviderModuleIdFormProviderEditSectionSectionIndexIndexRouteImport
       parentRoute: typeof ModulesProviderModuleIdFormProviderRoute
     }

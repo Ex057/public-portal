@@ -26,24 +26,22 @@ cd dhis2-public-portal
 
 ### 2. Set the Base Path
 
-The most important configuration is setting the `NEXT_PUBLIC_CONTEXT_PATH` environment variable.
+The most important configuration is setting the `CONTEXT_PATH` environment variable.
 
 Create the `.env` file in the `apps/portal/` folder. The file should have the following variables:
 
 - `DHIS2_BASE_URL`: The URL of your DHIS2 instance
 - `DHIS2_BASE_PAT_TOKEN`: A Personal Access Token for your DHIS2 instance
-- `NEXT_PUBLIC_CONTEXT_PATH`: A subpath where your application will be hosted (e.g `/portal`)
+- `CONTEXT_PATH`: A subpath where your application will be hosted (e.g `/portal`)
 
 This tells the Next.js application to use `/portal` as the base path for all assets and navigation.
 
 ### 3. Building a custom docker image
-
 You can then build your custom docker image by running:
 
 ```bash
-docker build -t portal:latest .
+docker build -t portal:latest . 
 ```
-
 And then run the created docker image
 
 ```bash
@@ -53,7 +51,7 @@ docker run -p 3000:3000 -e DHIS2_BASE_URL=https://your-dhis2-instance.org portal
 You can also use the `docker-comopse-build.yml` file provided to build and run the application using docker compose:
 
 ```bash
- docker compose -f docker-compose-build.yml up -d --build
+ docker compose -f docker-compose-build.yml up -d --build 
 ```
 
 ### 4. Reverse Proxy Configuration

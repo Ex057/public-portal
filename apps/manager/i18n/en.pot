@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-05-04T07:23:30.405Z\n"
-"PO-Revision-Date: 2026-05-04T07:23:30.406Z\n"
+"POT-Creation-Date: 2026-01-14T11:13:09.841Z\n"
+"PO-Revision-Date: 2026-01-14T11:13:09.842Z\n"
 
 msgid "Could not get Appearance configurations"
 msgstr "Could not get Appearance configurations"
@@ -77,26 +77,20 @@ msgstr "No logs yet. Perform an action to see logs here."
 msgid "Detail"
 msgstr "Detail"
 
-msgid "Edit visualization"
-msgstr "Edit visualization"
-
 msgid "Remove visualization"
 msgstr "Remove visualization"
 
 msgid "Add document"
 msgstr "Add document"
 
-msgid "Could not save the document. Please fix the form errors and try again"
-msgstr "Could not save the document. Please fix the form errors and try again"
+msgid "Could not create new library"
+msgstr "Could not create new library"
 
 msgid "File uploaded successfully"
 msgstr "File uploaded successfully"
 
 msgid "Could not save the file!"
 msgstr "Could not save the file!"
-
-msgid "Could not create new library"
-msgstr "Could not create new library"
 
 msgid "Create Item"
 msgstr "Create Item"
@@ -288,12 +282,6 @@ msgstr "Reload"
 msgid "Upload Icon"
 msgstr "Upload Icon"
 
-msgid "This field is required"
-msgstr "This field is required"
-
-msgid "Select organisation unit"
-msgstr "Select organisation unit"
-
 msgid "Application name"
 msgstr "Application name"
 
@@ -317,9 +305,6 @@ msgstr "Error saving changes"
 
 msgid "Changes saved successfully"
 msgstr "Changes saved successfully"
-
-msgid "Could not save the changes"
-msgstr "Could not save the changes"
 
 msgid "Dashboard group"
 msgstr "Dashboard group"
@@ -570,15 +555,6 @@ msgstr "Preview module"
 msgid "Could not save changes"
 msgstr "Could not save changes"
 
-msgid "Loading sources"
-msgstr "Loading sources"
-
-msgid "Loading organisation unit levels..."
-msgstr "Loading organisation unit levels..."
-
-msgid "Failed"
-msgstr "Failed"
-
 msgid "Section"
 msgstr "Section"
 
@@ -723,6 +699,9 @@ msgstr "Sort Items"
 msgid "Update..."
 msgstr "Update..."
 
+msgid "Error loading item"
+msgstr "Error loading item"
+
 msgid "Should be a valid svg string"
 msgstr "Should be a valid svg string"
 
@@ -744,54 +723,8 @@ msgstr "Add a new visualization"
 msgid "{{action}} visualization"
 msgstr "{{action}} visualization"
 
-msgid "Enable to restrict which periods users can select."
-msgstr "Enable to restrict which periods users can select."
-
-msgid "Limit period selections"
-msgstr "Limit period selections"
-
-msgid "Choose whether to include relative periods, fixed periods, or both."
-msgstr "Choose whether to include relative periods, fixed periods, or both."
-
-msgid ""
-"Select the period types users can choose from, e.g. Monthly, Quarterly, "
-"Yearly."
-msgstr ""
-"Select the period types users can choose from, e.g. Monthly, Quarterly, "
-"Yearly."
-
-msgid "Single period selection"
-msgstr "Single period selection"
-
-msgid "When enabled, users can only select one period at a time."
-msgstr "When enabled, users can only select one period at a time."
-
-msgid "Pin specific periods to restrict what users can select."
-msgstr "Pin specific periods to restrict what users can select."
-
-msgid "Enable to restrict which organisation units users can select."
-msgstr "Enable to restrict which organisation units users can select."
-
-msgid "Limit organisation unit selections"
-msgstr "Limit organisation unit selections"
-
-msgid "Organisation unit levels"
-msgstr "Organisation unit levels"
-
-msgid "Restrict data to specific levels in the organisation unit hierarchy."
-msgstr "Restrict data to specific levels in the organisation unit hierarchy."
-
-msgid "Single organisation unit selection"
-msgstr "Single organisation unit selection"
-
-msgid "When enabled, users can only select one organisation unit at a time."
-msgstr "When enabled, users can only select one organisation unit at a time."
-
-msgid "Organisation units"
-msgstr "Organisation units"
-
-msgid "Limit access to specific organisation units. Leave empty to allow all units."
-msgstr "Limit access to specific organisation units. Leave empty to allow all units."
+msgid "Edit visualization"
+msgstr "Edit visualization"
 
 msgid ""
 "Enable to show filters(i.e period selector & location selector) for "
@@ -813,29 +746,11 @@ msgstr ""
 msgid "Categorize visualizations into groups"
 msgstr "Categorize visualizations into groups"
 
-msgid "Periods"
-msgstr "Periods"
-
 msgid "Group selector"
 msgstr "Group selector"
 
 msgid "Save group changes"
 msgstr "Save group changes"
-
-msgid "Relative"
-msgstr "Relative"
-
-msgid "Fixed"
-msgstr "Fixed"
-
-msgid "Period categories"
-msgstr "Period categories"
-
-msgid "Period types"
-msgstr "Period types"
-
-msgid "Clear"
-msgstr "Clear"
 
 msgid "Failed to save visualization"
 msgstr "Failed to save visualization"

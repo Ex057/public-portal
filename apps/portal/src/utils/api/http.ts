@@ -1,328 +1,311 @@
-import { ConnectionStatus } from '@/types/connection'
-import {
-    DataEngine,
-    type DataEngineConfig,
-    FetchError,
-    RestAPILink,
-} from '@dhis2/data-engine'
+import { ConnectionStatus } from "@/types/connection";
 
 export class D2HttpClient {
-    baseURL: URL
-    pat: string
-    private dataEngine: DataEngine | null
+	baseURL: URL;
+	pat: string;
 
-    constructor(baseURL: string, pat: string) {
-        this.baseURL = D2HttpClient.sanitizeURL(baseURL)
-        this.pat = pat
-        this.dataEngine = null
-    }
+	constructor(baseURL: string, pat: string) {
+		this.baseURL = D2HttpClient.sanitizeURL(baseURL);
+		this.pat = pat;
+	}
 
-    static sanitizeURL(baseURL: string): URL {
-        if (baseURL.endsWith('/api') || baseURL.endsWith('/api/')) {
-            if (baseURL.endsWith('/')) {
-                return new URL(baseURL)
-            }
-            return new URL(`${baseURL}/`)
-        }
-        if (baseURL.endsWith('/')) {
-            return new URL('api/', baseURL)
-        }
-        return new URL('api/', `${baseURL}/`)
-    }
+	static sanitizeURL(baseURL: string): URL {
+		if (baseURL.endsWith("/api") || baseURL.endsWith("/api/")) {
+			if (baseURL.endsWith("/")) {
+				return new URL(baseURL);
+			}
+			return new URL(`${baseURL}/`);
+		}
+		if (baseURL.endsWith("/")) {
+			return new URL("api/", baseURL);
+		}
+		return new URL("api/", `${baseURL}/`);
+	}
 
-    static handleFetchError(e: unknown, context?: string): never {
-        const prefix = context ? `[D2HttpClient:${context}]` : '[D2HttpClient]'
-        if (e instanceof FetchError) {
-            console.error(
-                `${prefix} ${e.type} error (HTTP ${e.details?.httpStatusCode ?? 'unknown'}):`,
-                e.message
-            )
-        } else {
-            console.error(`${prefix} Unexpected error:`, e)
-        }
-        throw e
-    }
+	async getIcon(path: string) {
+		const url = new URL(`${path}`, this.baseURL);
+		const response = await fetch(url, {
+			cache: "force-cache",
+			headers: {
+				Authorization: `ApiToken ${this.pat}`,
+				Accept: "application/octet-stream;charset=utf-8",
+			},
+		});
 
-    private static parseApiVersion(version?: string): number | null {
-        if (!version) return null
-        const parts = version.split('.')
-        const major = parseInt(parts[0], 10)
-        const minor = parseInt(parts[1], 10)
-        if (isNaN(major)) return null
-        return major === 2 ? (isNaN(minor) ? null : minor) : major
-    }
+		const status = response.status;
+		if (status >= 400) {
+			throw `Request failed with status code ${status}`;
+		}
 
-    async init(): Promise<void> {
-        if (!this.dataEngine) {
-            await this._initialize()
-        }
-    }
+		const blob = await response.blob();
+		return new Response(blob, {
+			headers: {
+				...response.headers,
+			},
+		});
+	}
 
-    async getIcon(path: string) {
-        await this.init()
-        const response: Response = (await this.dataEngine!.fetch(path, {
-            cache: 'force-cache',
-            headers: {
-                Authorization: `ApiToken ${this.pat}`,
-                Accept: 'application/octet-stream;charset=utf-8',
-            },
-        })) as Response
+	async getRaw(path: string) {
+		const url = new URL(`${path}`, this.baseURL);
+		const response = await fetch(url, {
+			cache: "default",
+			headers: {
+				Authorization: `ApiToken ${this.pat}`,
+			},
+		});
+		const status = response.status;
+		if (status >= 400) {
+			console.error(await response.json());
+			throw `Request failed with status code ${status}`;
+		}
+		return response;
+	}
 
-        const status = response.status
-        if (status >= 400) {
-            throw `Request failed with status code ${status}`
-        }
+	/*
+	 * This is used to verify the following
+	 * The BASE URL is valid and accessible
+	 * The AUTH token is valid
+	 *
+	 * Additional checks:
+	 * TODO: Check if the DHIS2 instance is supported
+	 * TODO: Verify if the token has correct authorities
+	 *  TODO: Check if the token does not access potentially dangerous authorities
+	 *
+	 * */
+	async verifyClient(): Promise<ConnectionStatus> {
+		const url = `system/info`;
+		try {
+			const response = await this.get<{
+				version: string;
+				systemName: string;
+			}>(url);
+			return {
+				status: "OK",
+				version: response?.version,
+				name: response?.systemName,
+			};
+		} catch (e) {
+			console.error(`DHIS2 client verification failed!`);
+			if (typeof e === "object") {
+				if ("httpStatusCode" in e!) {
+					const code = e.httpStatusCode;
 
-        const blob = await response.blob()
+					switch (code) {
+						case 400:
+							return {
+								status: "ERROR",
+								title: "Invalid credentials",
+								message:
+									"Could not access DHIS2 instance. Please verify your credentials and try again.",
+							};
+						case 404:
+							return {
+								status: "ERROR",
+								title: "Invalid DHIS2 URL",
+								message:
+									"Could not access DHIS2 instance. Please verify the provided DHIS2 URL is correct and try again.",
+							};
+					}
+				}
+			}
 
-        return new Response(blob, {
-            headers: {
-                ...response.headers,
-            },
-        })
-    }
+			if (e instanceof Error) {
+				return {
+					status: "ERROR",
+					title: "Invalid DHIS2 connection",
+					message:
+						"Could not access the DHIS2 instance. verify the provided DHIS2 URL is correct and try again.",
+				};
+			}
 
-    async getRaw(path: string) {
-        await this.init()
-        const result = await this.dataEngine!.fetch(path, {
-            cache: 'default',
-            headers: {
-                Authorization: `ApiToken ${this.pat}`,
-            },
-        })
-        // The data engine returns a Blob directly for binary content types
-        if (result instanceof Blob) {
-            return new Response(result, { status: 200 })
-        }
+			return {
+				status: "ERROR",
+				title: "Unknown error",
+				message:
+					"Could not access DHIS2 instance due to an unknown error. Please view the server logs for more details.",
+			};
+		}
+	}
 
-        const response = result as Response
-        const status = response.status
-        if (status >= 400) {
-            console.error(await response.json())
-            throw `Request failed with status code ${status}`
-        }
-        return response
-    }
+	async getFile(
+		path: string,
+		meta?: {
+			params?: { [key: string]: string };
+		},
+	) {
+		const { params } = meta ?? {};
+		const url = new URL(`${path}`, this.baseURL);
 
-    /*
-     * This is used to verify the following
-     * The BASE URL is valid and accessible
-     * The AUTH token is valid
-     *
-     * Additional checks:
-     * TODO: Check if the DHIS2 instance is supported
-     * TODO: Verify if the token has correct authorities
-     *  TODO: Check if the token does not access potentially dangerous authorities
-     *
-     * */
-    async verifyClient(): Promise<ConnectionStatus> {
-        const url = `system/info`
-        try {
-            const response = await this.get<{
-                version: string
-                systemName: string
-            }>(url)
-            return {
-                status: 'OK',
-                version: response?.version,
-                name: response?.systemName,
-            }
-        } catch (e) {
-            console.error(`DHIS2 client verification failed!`)
-            if (e instanceof FetchError) {
-                if (e.type === 'access') {
-                    return {
-                        status: 'ERROR',
-                        title: 'Invalid credentials',
-                        message:
-                            'Could not access DHIS2 instance. Please verify your credentials and try again.',
-                    }
-                }
-                if (e.details?.httpStatusCode === 404) {
-                    return {
-                        status: 'ERROR',
-                        title: 'Invalid DHIS2 URL',
-                        message:
-                            'Could not access DHIS2 instance. Please verify the provided DHIS2 URL is correct and try again.',
-                    }
-                }
-                return {
-                    status: 'ERROR',
-                    title: 'Invalid DHIS2 connection',
-                    message:
-                        'Could not access the DHIS2 instance. verify the provided DHIS2 URL is correct and try again.',
-                }
-            }
+		if (params) {
+			Object.entries(params).forEach(([key, value]) => {
+				url.searchParams.append(key, value);
+			});
+		}
 
-            return {
-                status: 'ERROR',
-                title: 'Unknown error',
-                message:
-                    'Could not access DHIS2 instance due to an unknown error. Please view the server logs for more details.',
-            }
-        }
-    }
+		const detailsUrl = path.replace("/data", "");
 
-    async getFile(
-        path: string,
-        meta?: {
-            params?: { [key: string]: string }
-        }
-    ) {
-        await this.init()
-        const { params } = meta ?? {}
-        let url = path
-        if (params) {
-            const qs = new URLSearchParams(params).toString()
-            url = `${path}?${qs}`
-        }
+		const details = await this.get<{ name: string; url: string }>(
+			detailsUrl,
+		);
+		if (details == null) {
+			return;
+		}
+		const fileDetails = await this.get<{ name: string }>(
+			`fileResources/${details.url}`,
+		);
 
-        const detailsUrl = path.replace('/data', '')
+		const response = await fetch(url, {
+			cache: "force-cache",
+			headers: {
+				Authorization: `ApiToken ${this.pat}`,
+				Accept: "application/octet-stream;charset=utf-8",
+			},
+		});
 
-        const details = await this.get<{ name: string; url: string }>(
-            detailsUrl
-        )
-        if (details == null) {
-            return
-        }
-        const fileDetails = await this.get<{ name: string }>(
-            `fileResources/${details.url}`
-        )
+		const status = response.status;
 
-        const result = await this.dataEngine!.fetch(url, {
-            cache: 'force-cache',
-            headers: {
-                Authorization: `ApiToken ${this.pat}`,
-                Accept: 'application/octet-stream;charset=utf-8',
-            },
-        })
+		if (status >= 400) {
+			console.error(await response.json());
+			throw `Request failed with status code ${status}`;
+		}
 
-        // The data engine returns a Blob directly for binary content types
-        if (result instanceof Blob) {
-            return new Response(result, {
-                headers: {
-                    'content-disposition': `attachment; filename="${fileDetails?.name}"`,
-                },
-            })
-        }
+		const blob = await response.blob();
+		return new Response(blob, {
+			headers: {
+				...response.headers,
+				"content-disposition": `attachment; filename="${fileDetails?.name}"`,
+			},
+		});
+	}
 
-        const response = result as Response
-        const status = response.status
+	async get<T>(
+		path: string,
+		meta?: {
+			params?: { [key: string]: string };
+		},
+	) {
+		// try {
+		const { params } = meta ?? {};
+		const url = new URL(`${path}`, this.baseURL);
+		if (params) {
+			Object.entries(params).forEach(([key, value]) => {
+				url.searchParams.append(key, value);
+			});
+		}
 
-        if (status >= 400) {
-            console.error(await response.json())
-            throw `Request failed with status code ${status}`
-        }
+		const response = await fetch(url, {
+			cache: "no-store",
+			headers: {
+				Authorization: `ApiToken ${this.pat}`,
+			},
+		});
+		const status = response.status;
 
-        const blob = await response.blob()
-        return new Response(blob, {
-            headers: {
-                ...response.headers,
-                'content-disposition': `attachment; filename="${fileDetails?.name}"`,
-            },
-        })
-    }
+		if (status >= 400) {
+			console.error(
+				`API call to ${url} failed with status code ${status}`,
+			);
+			let errorDetails;
+			try {
+				errorDetails = await response.json();
+			} catch (e) {
+				errorDetails = response;
+			}
+			throw errorDetails;
+		}
+		return (await response.json()) as T;
+		//
+	}
 
-    async get<T>(
-        path: string,
-        meta?: {
-            params?: { [key: string]: string }
-        }
-    ) {
-        await this.init()
-        const { params } = meta ?? {}
-        let url = path
-        if (params) {
-            const qs = new URLSearchParams(params).toString()
-            url = `${path}?${qs}`
-        }
+	async post<T, R>(
+		path: string,
+		body?: T,
+		meta?: {
+			params?: { [key: string]: string };
+		},
+	) {
+		const { params } = meta ?? {};
+		const url = new URL(`${path}`, this.baseURL);
+		if (params) {
+			Object.entries(params).forEach(([key, value]) => {
+				url.searchParams.append(key, value);
+			});
+		}
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Authorization": `ApiToken ${this.pat}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		});
 
-        return this.dataEngine!.get(url).catch((e) =>
-            D2HttpClient.handleFetchError(e, `GET ${path}`)
-        ) as Promise<T>
-    }
+		const status = response.status;
+		if (status >= 400) {
+			throw `Request failed with status code ${status}`;
+		}
+		return (await response.json()) as R;
+	}
 
-    async post<T, R>(
-        path: string,
-        body?: T,
-        meta?: {
-            params?: { [key: string]: string }
-        }
-    ) {
-        await this.init()
-        const { params } = meta ?? {}
-        let url = path
-        if (params) {
-            const qs = new URLSearchParams(params).toString()
-            url = `${path}?${qs}`
-        }
+	async put<T, R>(
+		path: string,
+		body?: T,
+		meta?: {
+			params?: { [key: string]: string };
+		},
+	) {
+		const { params } = meta ?? {};
+		const url = new URL(`${path}`, this.baseURL);
+		if (params) {
+			Object.entries(params).forEach(([key, value]) => {
+				url.searchParams.append(key, value);
+			});
+		}
+		const response = await fetch(url, {
+			method: "PUT",
+			headers: {
+				"Authorization": `ApiToken ${this.pat}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		});
 
-        return this.dataEngine!.post(url, body).catch((e) =>
-            D2HttpClient.handleFetchError(e, `POST ${path}`)
-        ) as Promise<R>
-    }
+		const status = response.status;
+		if (status >= 400) {
+			throw `Request failed with status code ${status}`;
+		}
+		return (await response.json()) as R;
+	}
 
-    async put<T, R>(
-        path: string,
-        body?: T,
-        meta?: {
-            params?: { [key: string]: string }
-        }
-    ) {
-        await this.init()
-        const { params } = meta ?? {}
-        let url = path
-        if (params) {
-            const qs = new URLSearchParams(params).toString()
-            url = `${path}?${qs}`
-        }
+	async postFeedback<T>(
+		path: string,
+		meta?: { params?: { [key: string]: string } },
+		p0?: {
+			params: { recipients: string; subject: string; message: string };
+		},
+	) {
+		const { params } = meta ?? {};
+		const url = new URL(`${path}`, this.baseURL);
+		if (params) {
+			Object.entries(params).forEach(([key, value]) => {
+				url.searchParams.append(key, value);
+			});
+		}
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Authorization: `ApiToken ${this.pat}`,
+			},
+			body: "",
+		});
 
-        return this.dataEngine!.put(url, body).catch((e) =>
-            D2HttpClient.handleFetchError(e, `PUT ${path}`)
-        ) as Promise<R>
-    }
+		const status = response.status;
 
-    async postFeedback<T>(
-        path: string,
-        meta?: { params?: { [key: string]: string } }
-    ) {
-        await this.init()
-        const { params } = meta ?? {}
+		if (status >= 400) {
+			console.error(await response.json());
+			throw `Request failed with status code ${status}`;
+		}
 
-        const mutation = { resource: path, type: 'create' as const, params }
-        return this.dataEngine!.mutate(
-            mutation as Parameters<
-                NonNullable<typeof this.dataEngine>['mutate']
-            >[0]
-        ).catch((e) =>
-            D2HttpClient.handleFetchError(e, `POST ${path}`)
-        ) as Promise<T>
-    }
-
-    private async _initialize(): Promise<void> {
-        let apiVersion = 40 // default to 2.40 for older DHIS2 instances
-        try {
-            const url = new URL('system/info', this.baseURL)
-            const response = await fetch(url, {
-                cache: 'no-store',
-                headers: { Authorization: `ApiToken ${this.pat}` },
-            })
-            if (response.ok) {
-                const info = (await response.json()) as { version?: string }
-                const parsed = D2HttpClient.parseApiVersion(info.version)
-                if (parsed !== null) {
-                    apiVersion = parsed
-                }
-            }
-        } catch (error) {
-            console.error('Error fetching DHIS2 version:', error)
-            console.error(`Falling back to default version ${apiVersion}`)
-        }
-        const config: DataEngineConfig = {
-            baseUrl: this.baseURL.toString().replace('/api/', ''),
-            apiVersion,
-            apiToken: this.pat,
-        }
-        this.dataEngine = new DataEngine(new RestAPILink(config))
-    }
+		return (await response.json()) as T;
+	}
 }

@@ -44,9 +44,9 @@ This installation requires node > 20 already installed in your system
 ```
 
 2. Unzip the portal app
-    ```bash
-    unzip portal.zip -d portal
-    ```
+   ```bash
+   unzip portal.zip -d portal
+   ```
 3. Navigate to the portal folder
 
 ```bash
@@ -54,19 +54,19 @@ cd portal
 ```
 
 5. Install PM2:
-    ```bash
-    corepack enable
-    yarn global add pm2
-    ```
+   ```bash
+   corepack enable 
+   yarn global add pm2
+   ```
 6. Start the application using the provided PM2 configuration:
-    ```bash
-    pm2 start pm2.config.js
-    ```
+   ```bash
+   pm2 start pm2.config.js
+   ```
 7. To ensure the application starts automatically after system reboot:
-    ```bash
-    pm2 save
-    pm2 startup
-    ```
+   ```bash
+   pm2 save
+   pm2 startup
+   ```
 
 The PM2 configuration file (`pm2.config.js`) is already set up to run the portal app with the name "FlexiPortal" using
 the script at `apps/portal/server.js`.
@@ -77,6 +77,7 @@ You can quickly deploy the application through vercel by clicking the button bel
 This requires you to have a [vercel](https://vercel.com/) account.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/hisptz/dhis2-public-portal&env=DHIS2_BASE_URL,DHIS2_BASE_PAT_TOKEN&envDescription=The%20DHIS2%20base%20URL%20and%20PAT%20token%20variables%20enable%20you%20to%20connect%20your%20deployed%20portal%20to%20a%20DHIS2%20instance&project-name=dhis2-public-portal&repository-name=dhis2-public-portal&root-directory=apps/portal&install-command=yarn%20install&build-command=turbo%20build%20--filter%20portal&skip-unaffected=true)
+
 
 #### Docker
 
@@ -95,17 +96,17 @@ You can also use `docker compose` with this docker-compose.yml file:
 
 ```yaml
 services:
-    portal:
-        image: hisptanzania/dhis2-public-portal:latest
-        ports:
-            - '3000:3000'
-        env_file:
-            - .env
-        volumes:
-            - public:/app/apps/portal/public
+  portal:
+    image: hisptanzania/dhis2-public-portal:latest
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - public:/app/apps/portal/public
 
 volumes:
-    public:
+  public:
 ```
 
 Save this to a file named `docker-compose.yml` and run:
@@ -126,14 +127,14 @@ The following environment variables are required in the `.env` file:
 In cases where your application will be available through a subpath (e.g https://example.org/some/path, you will need to
 build the app yourself before deploying.
 
-Before building your application, make sure to set the `NEXT_PUBLIC_CONTEXT_PATH` to the desired subpath. For example, the
+Before building your application, make sure to set the `CONTEXT_PATH` to the desired subpath. For example, the
 URL https://example.org/some/path' the subpath is `/some/path`
 
 ### Docker
 
 To build and run the application as a docker container, clone this repository to your server.
 
-```bash
+```bash 
 git clone --single-branch --branch main https://github.com/hisptz/dhis2-public-portal.git
 ```
 
@@ -141,12 +142,12 @@ Then create the `.env` file in the `apps/portal/` folder. The file should have t
 
 - `DHIS2_BASE_URL`: The URL of your DHIS2 instance
 - `DHIS2_BASE_PAT_TOKEN`: A Personal Access Token for your DHIS2 instance
-- `NEXT_PUBLIC_CONTEXT_PATH`: A subpath where your application will be hosted
+- `CONTEXT_PATH`: A subpath where your application will be hosted
 
 Then run;
 
 ```bash
- docker compose -f docker-compose-build.yml up -d --build
+ docker compose -f docker-compose-build.yml up -d --build 
 ```
 
 ## Development Guide
@@ -175,28 +176,26 @@ The project is organized as a monorepo using Yarn workspaces and Turborepo, with
 ### Setup Instructions
 
 1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/hisptz/dhis2-public-portal.git
-    cd dhis2-public-portal
-    ```
+   ```bash
+   git clone https://github.com/hisptz/dhis2-public-portal.git
+   cd dhis2-public-portal
+   ```
 
 2. Install dependencies:
-
-    ```bash
-    yarn install
-    ```
+   ```bash
+   yarn install
+   ```
 
 3. Set up environment variables:
     - For the portal app, create a `.env` file in `apps/portal/` with:
-        ```
-        DHIS2_BASE_URL=https://your-dhis2-instance.org
-        DHIS2_BASE_PAT_TOKEN=your-personal-access-token
-        ```
+      ```
+      DHIS2_BASE_URL=https://your-dhis2-instance.org
+      DHIS2_BASE_PAT_TOKEN=your-personal-access-token
+      ```
     - For the manager app, create a `.env` file in `apps/manager/` with:
-        ```
-        DHIS2_PROXY_URL=https://your-dhis2-instance.org
-        ```
+      ```
+      DHIS2_PROXY_URL=https://your-dhis2-instance.org
+      ```
 
 ### Development Workflow
 

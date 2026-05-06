@@ -1,116 +1,108 @@
-'use client'
+"use client";
 
-import { Stack, TextInput, Tooltip } from '@mantine/core'
-import i18n from '@dhis2/d2-i18n'
-import { useBoolean } from 'usehooks-ts'
+import { Stack, TextInput, Tooltip } from "@mantine/core";
+import i18n from "@dhis2/d2-i18n";
+import { useBoolean } from "usehooks-ts";
 
-import { useMemo, useTransition } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { PeriodConfig } from '@packages/shared/schemas'
-import { IconClock } from '@tabler/icons-react'
-import { PeriodTypeCategory, PeriodUtility } from '@hisptz/dhis2-utils'
-import { createFixedPeriodFromPeriodId } from '@dhis2/multi-calendar-dates'
-import { useRouter } from 'nextjs-toploader/app'
-import { CustomPeriodModal } from '@/components/displayItems/visualizations/CustomPeriodModal'
+import { useMemo, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
+import { PeriodConfig } from "@packages/shared/schemas";
+import { IconClock } from "@tabler/icons-react";
+import { PeriodTypeCategory, PeriodUtility } from "@hisptz/dhis2-utils";
+import { createFixedPeriodFromPeriodId } from "@dhis2/multi-calendar-dates";
+import { useRouter } from "nextjs-toploader/app";
+import { CustomPeriodModal } from "@/components/displayItems/visualizations/CustomPeriodModal";
 
 export function GlobalPeriodFilter({
-    periodConfig,
-    title,
-    isPending,
+	periodConfig,
+	title,
+	isPending,
 }: {
-    periodConfig?: PeriodConfig
-    title?: string
-    isPending: boolean
+	periodConfig?: PeriodConfig;
+	title?: string;
+	isPending: boolean;
 }) {
-    const [isPendingPeriod, startPeriodTransition] = useTransition()
-    const router = useRouter()
-    const searchParams = useSearchParams()
-    const { value: hide, setTrue: onClose, setFalse: onOpen } = useBoolean(true)
+	const [isPendingPeriod, startPeriodTransition] = useTransition();
+	const router = useRouter();
+	const searchParams = useSearchParams();
+	const {
+		value: hide,
+		setTrue: onClose,
+		setFalse: onOpen,
+	} = useBoolean(true);
+	const periods = useMemo(() => {
+		return searchParams
+			.get("pe")
+			?.split(",")
+			?.map((id: string) => {
+				const label =
+					/^\d{4}$/.test(id) && parseInt(id) < 1009
+						? id
+						: PeriodUtility.getPeriodById(id).type.type ==
+							  PeriodTypeCategory.FIXED
+							? createFixedPeriodFromPeriodId({
+									periodId: id,
+									calendar: "gregory",
+								})?.displayName
+							: PeriodUtility.getPeriodById(id).name;
+				return { value: id, label: label };
+			});
+	}, [searchParams]);
 
-    const resolvePeriodLabel = (id: string) => {
-        if (!id) return ''
-        if (/^\d{4}$/.test(id) && parseInt(id) < 1009) {
-            return id
-        }
+	const onUpdate = (value: string[]) => {
+		const updateSearchParams = new URLSearchParams(searchParams);
+		updateSearchParams.set("pe", value.join(","));
+		startPeriodTransition(() => {
+			router.replace(`?${updateSearchParams.toString()}`);
+		});
+	};
+	const hasActiveParams = !!searchParams.get("pe");
 
-        try {
-            const period = PeriodUtility.getPeriodById(id)
-            return period.type.type == PeriodTypeCategory.FIXED
-                ? createFixedPeriodFromPeriodId({
-                      periodId: id,
-                      calendar: 'gregory',
-                  })?.displayName ?? period.name
-                : period.name
-        } catch {
-            return id
-        }
-    }
+	const onReset = () => {
+		const params = new URLSearchParams(searchParams);
+		params.delete("pe");
+		startPeriodTransition(() => {
+			router.replace(`?${params.toString()}`);
+		});
+	};
 
-    const periods = useMemo(() => {
-        return searchParams
-            .get('pe')
-            ?.split(',')
-            ?.filter((id: string) => !!id?.trim())
-            ?.map((id: string) => ({
-                value: id,
-                label: resolvePeriodLabel(id),
-            }))
-    }, [searchParams])
-
-    const onUpdate = (value: string[]) => {
-        const updateSearchParams = new URLSearchParams(searchParams)
-        updateSearchParams.set('pe', value.join(','))
-        startPeriodTransition(() => {
-            router.replace(`?${updateSearchParams.toString()}`)
-        })
-    }
-    const hasActiveParams = !!searchParams.get('pe')
-
-    const onReset = () => {
-        const params = new URLSearchParams(searchParams)
-        params.delete('pe')
-        startPeriodTransition(() => {
-            router.replace(`?${params.toString()}`)
-        })
-    }
-
-    return (
-        <>
-            <Stack>
-                <div className="w-full flex gap-2">
-                    <Tooltip
-                        withArrow
-                        position={'bottom'}
-                        label={i18n.t('Click to change period')}
-                    >
-                        <TextInput
-                            label={'Period'}
-                            disabled={isPending || isPendingPeriod}
-                            readOnly
-                            rightSection={<IconClock size={16} />}
-                            value={
-                                isPending || isPendingPeriod
-                                    ? i18n.t('Please wait...')
-                                    : (periods
-                                          ?.map((pe) => pe.label)
-                                          .join(', ') ?? '')
-                            }
-                            onClick={onOpen}
-                        />
-                    </Tooltip>
-                </div>
-            </Stack>
-            {!hide && (
-                <CustomPeriodModal
-                    {...(periodConfig ?? {})}
-                    periodState={periods?.map((pe) => pe.value)}
-                    open={!hide}
-                    onReset={hasActiveParams ? onReset : () => {}}
-                    handleClose={onClose}
-                    onUpdate={onUpdate}
-                    title={title ?? ''}
-                />
-            )}
-        </>
-    )
+	return (
+		<>
+			<Stack>
+				<div className="w-full flex gap-2">
+					<Tooltip
+						withArrow
+						position={"bottom"}
+						label={i18n.t("Click to change period")}
+					>
+						<TextInput
+							label={"Period"}
+							disabled={isPending || isPendingPeriod}
+							readOnly
+							rightSection={<IconClock size={16} />}
+							value={
+								isPending || isPendingPeriod
+									? i18n.t("Please wait...")
+									: (periods
+											?.map((pe) => pe.label)
+											.join(", ") ?? "")
+							}
+							onClick={onOpen}
+						/>
+					</Tooltip>
+				</div>
+			</Stack>
+			{!hide && (
+				<CustomPeriodModal
+					{...(periodConfig ?? {})}
+					periodState={periods?.map((pe) => pe.value)}
+					open={!hide}
+					onReset={hasActiveParams ? onReset : () => {}}
+					handleClose={onClose}
+					onUpdate={onUpdate}
+					title={title ?? ""}
+				/>
+			)}
+		</>
+	);
 }
